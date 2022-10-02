@@ -87,7 +87,7 @@ Of the stations that serve the A train, There are **`r nrow(NYC_Transit_A_ada)`*
 ##### Question2 #####
 Read and clean the Mr. Trash Wheel sheet
 ```{r Trash_wheel}
-Trash_wheel =read_excel("./hw2_downloaddata/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Mr. Trash Wheel", range = "A2:N535") %>% 
+Trash_wheel =read_excel("./hw2_downloaddata/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Mr. Trash Wheel", range = "A2:N535",) %>% 
   janitor:: clean_names() %>% 
   drop_na(dumpster) %>% 
   mutate(sports_balls=round(sports_balls,digits=0)) %>% 
@@ -95,11 +95,32 @@ Trash_wheel =read_excel("./hw2_downloaddata/Trash-Wheel-Collection-Totals-7-2020
 ```
 
 Read and clean the Professor Trash Wheel sheet
-```{r Trash_wheel}
+```{r Professor_Trash_wheel}
 Professor_Trash_wheel =read_excel("./hw2_downloaddata/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Professor Trash Wheel", range = "A2:N117") %>% 
   janitor:: clean_names() %>% 
   drop_na(dumpster) %>% 
   mutate(sports_balls=round(sports_balls,digits=0)) %>% 
   mutate(sports_balls=as.integer(sports_balls))
 ```
+
+
+Add an additional variable to both datasets before combining
+```{r }
+Professor_Trash_wheel_new = 
+  mutate(Professor_Trash_wheel, wheel_name = "Professor_Trash_wheel",dumpster = as.character(dumpster))
+
+Trash_wheel_new = mutate(Trash_wheel,
+  wheel_name = "Mr.Trash_wheel" )
+
+
+```
+
+combine the two dataset
+```{r combine}
+Trash_full = bind_rows(Trash_wheel_new, Professor_Trash_wheel_new) %>%
+  janitor::clean_names() 
+```
+
+
+
 
