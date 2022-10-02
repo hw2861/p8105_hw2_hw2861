@@ -1,0 +1,8 @@
+---
+title: "p8105_hw2_hw2861"
+author: "Hongmiao Wang"
+date: "2022-10-02"
+output: github_document
+---
+
+
