@@ -8,6 +8,7 @@ output: github_document
 
 ```{r setup,include=FALSE }
 library(tidyverse)
+library(readxl)
 ```
 
 ##### Question1 #####
@@ -79,3 +80,26 @@ How many distinct stations serve the A train?
 There are **`r nrow(NYC_Transit_A)`**  serve the A train.
 
 Of the stations that serve the A train, There are **`r nrow(NYC_Transit_A_ada)`** are ADA compliant.
+
+
+
+
+##### Question2 #####
+Read and clean the Mr. Trash Wheel sheet
+```{r Trash_wheel}
+Trash_wheel =read_excel("./hw2_downloaddata/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Mr. Trash Wheel", range = "A2:N535") %>% 
+  janitor:: clean_names() %>% 
+  drop_na(dumpster) %>% 
+  mutate(sports_balls=round(sports_balls,digits=0)) %>% 
+  mutate(sports_balls=as.integer(sports_balls))
+```
+
+Read and clean the Professor Trash Wheel sheet
+```{r Trash_wheel}
+Professor_Trash_wheel =read_excel("./hw2_downloaddata/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Professor Trash Wheel", range = "A2:N117") %>% 
+  janitor:: clean_names() %>% 
+  drop_na(dumpster) %>% 
+  mutate(sports_balls=round(sports_balls,digits=0)) %>% 
+  mutate(sports_balls=as.integer(sports_balls))
+```
+
