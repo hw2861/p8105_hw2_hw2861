@@ -10,13 +10,11 @@ output: github_document
 library(tidyverse)
 ```
 
-
-
 ##### Question1 #####
 
 In the first step, i import and clean the NYC_Transit_data.
 ```{r NYC_Transit}
-NYC_Transit =read_csv("./hw2_downloadfile/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",col_types = cols(Route8 = "c", Route9 = "c", Route10 = "c", Route11 = "c")) %>% 
+NYC_Transit =read_csv("./hw2_downloaddata/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",col_types = cols(Route8 = "c", Route9 = "c", Route10 = "c", Route11 = "c")) %>% 
   janitor:: clean_names() %>% 
   select(line,station_name,station_latitude,station_longitude,route1:route11,entry,vending,entrance_type,ada) %>%
   mutate(entry=recode(entry, "YES"=TRUE , "NO" = FALSE))
@@ -30,3 +28,54 @@ In the meantime, I standardised the names of the remaining 19 variables.
 And the data of the entry variable has been recoded from a character(YES vs NO) to a logical variable with "TRUE" or "FALSE".
 For the dimension, There are **`r nrow(NYC_Transit)` **rows × **`r ncol(NYC_Transit)` **columns in the resulting dataset. 
 These data are **NOT tidy **currently. Because there are redundant columns for route numbers.And the route numbers across 11 columns can be organised into 1 columns.
+
+##Further 3 question in Q1
+How many distinct stations are there? 
+
+There are **`r nrow(distinct(NYC_Transit, line, station_name))`** distinct stations
+
+
+How many stations are ADA compliant?
+```{r NYC_Transit_ada}
+NYC_Transit_AD = filter(NYC_Transit,ada==TRUE)
+NYC_Transit_AD_number = nrow(distinct(NYC_Transit_AD, line, station_name))
+```
+**`r NYC_Transit_AD_number`** stations are ADA compliant.
+
+
+What proportion of station entrances / exits without vending allow entrance?
+```{r without vending allow entrance}
+NYC_Transit_vending = filter(NYC_Transit,vending == "NO",entry == TRUE)
+NYC_Transit_Vending2 = filter(NYC_Transit,vending == "NO")
+vending = {nrow(NYC_Transit_vending)}/{nrow(NYC_Transit_Vending2)}
+```
+**`r vending`**  of station entrances / exits without vending allow entrance.
+
+##Further question in Q1
+As question 1 was not scored and the answer was given. 
+The standard answers have been **directly pasted** here in the next chunk.
+```{r}
+NYC_Transit_A=
+  NYC_Transit %>% 
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route") %>% 
+  filter(route == "A") %>% 
+  select(station_name, line) %>% 
+  distinct
+
+NYC_Transit_A_ada=
+  NYC_Transit %>% 
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route") %>% 
+  filter(route == "A", ada == TRUE) %>% 
+  select(station_name, line) %>% 
+  distinct
+```
+How many distinct stations serve the A train? 
+There are **`r nrow(NYC_Transit_A)`**  serve the A train.
+
+Of the stations that serve the A train, There are **`r nrow(NYC_Transit_A_ada)`** are ADA compliant.
