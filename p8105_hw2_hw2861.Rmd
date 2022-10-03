@@ -168,9 +168,19 @@ unemployment = read_csv( "./hw2_downloaddata/unemployment.csv",show_col_types = 
     mutate(month=sapply(month,function(x) grep(paste("(?i)",x,sep=""),month.abb)))%>% 
    mutate (month = month.name[month]) 
 
-  
 ```
 
 
+
+Join the datasets by merging snp into pols
+merging unemployment into the result
+```{r}
+pols_month_pre = mutate(pols_month,year=as.numeric(year))
+
+pols_snp_join = left_join(snp, pols_month_pre, by = c("year","month"))
+
+pols_snp_unemploy = left_join(pols_snp_join, unemployment, by = c("year", "month"))
+
+```
 
 
