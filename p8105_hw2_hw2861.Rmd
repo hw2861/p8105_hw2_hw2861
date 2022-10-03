@@ -128,3 +128,49 @@ The total number of sports balls collected by Mr. Trash Wheel in 2020 was **`r s
 
 
 
+##### Question3 #####
+clean the data in pols-month.csv
+```{r }
+pols_month= read_csv("./hw2_downloaddata/pols-month.csv") %>% 
+  janitor::clean_names () %>% 
+  separate(mon, into = c ("year", "month", "day"), sep ="-")%>% 
+  mutate(month=as.numeric(month))%>% 
+  mutate (month = month.name[month])%>%
+  mutate (prez_dem = recode(prez_dem, `1` ="dem", `0` ="gop")) %>% 
+  mutate (president = prez_dem)%>% 
+  select (-prez_gop,-prez_dem) %>% 
+  select (-day)
+
+```
+
+
+clean the data in snp.csv
+```{r}
+snp = read_csv("./hw2_downloaddata/snp.csv",show_col_types = FALSE) %>% 
+  janitor :: clean_names() %>% 
+  separate(date, into =c ("month", "day", "year"), sep = "/") %>% 
+  mutate(month=as.numeric(month))%>% 
+  mutate (month = month.name[month]) %>% 
+  mutate(year=as.numeric(year))%>% 
+  mutate (year = if_else(year>49, year +1900, year +2000)) %>% 
+  select (year, month,everything())%>% 
+  select (-day) 
+```
+
+tidy the unemployment data
+```{r}
+unemployment = read_csv( "./hw2_downloaddata/unemployment.csv",show_col_types = FALSE ) %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    jan:dec,
+    names_to = "month",
+    values_to = "percent_unemployment" ) %>%
+    mutate(month=sapply(month,function(x) grep(paste("(?i)",x,sep=""),month.abb)))%>% 
+   mutate (month = month.name[month]) 
+
+  
+```
+
+
+
+
