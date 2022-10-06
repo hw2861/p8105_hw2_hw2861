@@ -114,9 +114,20 @@ mr_Trash_wheel_new = mutate(mr_Trash_wheel,
 
 combine the two dataset
 ```{r combine}
-Trash_full = bind_rows(mr_Trash_wheel_new, Professor_Trash_wheel_new) %>%
+Trash_full = full_join(mr_Trash_wheel_new, Professor_Trash_wheel_new) %>%
   janitor::clean_names() 
 
+```
+
+
+Answer the two questions:What was the total weight of trash collected by Professor Trash Wheel?
+```{r}
+sum(Professor_Trash_wheel$weight_tons)
+```
+
+Answer the two questions:What was the total number of sports balls collected by Mr. Trash Wheel in 2020?
+```{r}
+sum(mr_Trash_wheel$sports_balls[which(mr_Trash_wheel$year == 2020)])
 ```
 
 
@@ -183,8 +194,8 @@ pols_snp_unemploy = left_join(pols_snp_join, unemployment, by = c("year", "month
 ```
 
 
-The dataset **pols_month** contains **`r nrow(pols_month)`** observations of **`r ncol(pols_month)`**  variables. So There are **`r nrow(pols_month)`** rows × **`r ncol(pols_month)`** columns in this dataset. This dataset is about the number of national politicians from different parties(Republican vs Democratic) between  **`r min(pols_month$year)`**  and  **`r max(pols_month$year)`** .The most important variable in this dataset is **president** ,which gives us the information about the president's party on the associated month.
+There are three separate datasets and one combined dataset.The dataset **pols_month** contains **`r nrow(pols_month)`** observations of **`r ncol(pols_month)`**  variables. So There are **`r nrow(pols_month)`** rows × **`r ncol(pols_month)`** columns in this dataset. This dataset is about the number of national politicians from different parties(Republican vs Democratic) between  **`r min(pols_month$year)`**  and  **`r max(pols_month$year)`** .The most important variable in this dataset is **president** ,which gives us the information about the president's party on the associated month.
 The dataset **snp** contains **`r nrow(snp)`** observations of **`r ncol(snp)`**  variables. So There are **`r nrow(snp)`** rows × **`r ncol(snp)`** columns in this dataset. This dataset is about the Standard & Poor’s stock market index (S&P) between  **`r min(snp$year)`**  and  **`r max(snp$year)`** .The most important variable in this dataset is **close** ,which gives us the information about the closing values of the S&P stock index on the associated month.
 The dataset **unemployment** contains **`r nrow(unemployment)`** observations of **`r ncol(unemployment)`**  variables. So There are **`r nrow(unemployment)`** rows × **`r ncol(unemployment)`** columns in this dataset. This dataset is about Unemployment information between  **`r min(unemployment$year)`**  and  **`r max(unemployment$year)`** .The most important variable in this dataset is **percent_unemployment** created by using “long” format ,which gives us the information about the specific percentage of unemployment on the associated month.
 In the dataset, **year** and **month** are also the important key variables.We merge the three datasets together by using these two variables.
-In the final combined dataset **pols_snp_unemploy**, we can see the government information, Unemployment percentage and S&P stock index for a given month between  **`r min(pols_snp_unemploy$year)`**  and  **`r max(pols_snp_unemploy$year)`** . This makes it easier to find associations between these variables.
+In the final combined dataset **pols_snp_unemploy**, we can see the government information, Unemployment percentage and S&P stock index for a given month between  **`r min(pols_snp_unemploy$year)`**  and  **`r max(pols_snp_unemploy$year)`** .  This makes it easier to find associations between these variables. The final combined dataset **pols_snp_unemploy** contains **`r nrow(pols_snp_unemploy)`** observations of **`r ncol(pols_snp_unemploy)`**  variables. So There are **`r nrow(pols_snp_unemploy)`** rows × **`r ncol(pols_snp_unemploy)`** columns in this dataset.
